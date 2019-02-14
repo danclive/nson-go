@@ -24,7 +24,7 @@ func TestEncodeDecode(t *testing.T) {
 		"h": U64(4),
 		"i": String("aaa"),
 		"j": Array{F32(666.777)},
-		"k": Boolean(false),
+		"k": Bool(false),
 		"l": Null{},
 		"m": Binary{1, 2, 3, 4, 5, 6},
 		"n": Timestamp(12345),

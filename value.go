@@ -118,7 +118,7 @@ func decode_value(buf *bytes.Buffer, tag uint8) (string, Value, error) {
 			return "", nil, err
 		}
 
-		value, err := Boolean(false).Decode(buf)
+		value, err := Bool(false).Decode(buf)
 		if err != nil {
 			return "", nil, err
 		}

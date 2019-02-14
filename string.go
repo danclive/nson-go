@@ -1,6 +1,9 @@
 package nson
 
-import "bytes"
+import (
+	"bytes"
+	"fmt"
+)
 
 // String
 func (self String) Tag() uint8 {
@@ -8,7 +11,7 @@ func (self String) Tag() uint8 {
 }
 
 func (self String) String() string {
-	return string(self)
+	return fmt.Sprintf("String(%v)", string(self))
 }
 
 func (self String) Encode(buf *bytes.Buffer) error {

@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-func (self Boolean) Tag() uint8 {
+func (self Bool) Tag() uint8 {
 	return TAG_BOOLEAN
 }
 
-func (self Boolean) String() string {
+func (self Bool) String() string {
 	if self {
 		return fmt.Sprint("True")
 	} else {
@@ -17,7 +17,7 @@ func (self Boolean) String() string {
 	}
 }
 
-func (self Boolean) Encode(buf *bytes.Buffer) error {
+func (self Bool) Encode(buf *bytes.Buffer) error {
 	if self {
 		if err := buf.WriteByte(0x01); err != nil {
 			return err
@@ -31,11 +31,11 @@ func (self Boolean) Encode(buf *bytes.Buffer) error {
 	return nil
 }
 
-func (self Boolean) Decode(buf *bytes.Buffer) (Value, error) {
+func (self Bool) Decode(buf *bytes.Buffer) (Value, error) {
 	b, err := buf.ReadByte()
 	if err != nil {
 		return nil, err
 	}
 
-	return Boolean(b == 0x01), nil
+	return Bool(b == 0x01), nil
 }

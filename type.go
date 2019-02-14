@@ -30,7 +30,7 @@ type String string
 
 type Array []Value
 
-type Boolean bool
+type Bool bool
 
 type Null struct{}
 

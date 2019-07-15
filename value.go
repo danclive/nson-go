@@ -111,7 +111,7 @@ func decode_value(buf *bytes.Buffer, tag uint8) (string, Value, error) {
 		}
 
 		return key, value, nil
-	case TAG_BOOLEAN:
+	case TAG_BOOL:
 		key, err := readCstring(buf)
 
 		if err != nil {

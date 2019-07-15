@@ -249,7 +249,7 @@ func (self *Message) GetBool(key string) (bool, error) {
 		return false, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_BOOLEAN {
+	if value.Tag() != TAG_BOOL {
 		return false, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 

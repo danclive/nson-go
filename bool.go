@@ -6,7 +6,7 @@ import (
 )
 
 func (self Bool) Tag() uint8 {
-	return TAG_BOOLEAN
+	return TAG_BOOL
 }
 
 func (self Bool) String() string {

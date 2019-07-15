@@ -10,7 +10,7 @@ const (
 	TAG_STRING       uint8 = 0x07
 	TAG_ARRAY        uint8 = 0x08
 	TAG_MESSAGE      uint8 = 0x09
-	TAG_BOOLEAN      uint8 = 0x0A
+	TAG_BOOL         uint8 = 0x0A
 	TAG_NULL         uint8 = 0x0B
 	TAG_BINARY       uint8 = 0x0C
 	TAG_TIMESTAMP    uint8 = 0x0D

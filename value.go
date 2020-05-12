@@ -190,6 +190,6 @@ func decode_value(buf *bytes.Buffer, tag uint8) (string, Value, error) {
 
 		return key, value, nil
 	default:
-		return "", nil, fmt.Errorf("Unsupported type '%X'.", tag)
+		return "", nil, fmt.Errorf("Unsupported type '%X'", tag)
 	}
 }

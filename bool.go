@@ -12,9 +12,9 @@ func (self Bool) Tag() uint8 {
 func (self Bool) String() string {
 	if self {
 		return fmt.Sprint("True")
-	} else {
-		return fmt.Sprint("False")
 	}
+
+	return fmt.Sprint("False")
 }
 
 func (self Bool) Encode(buf *bytes.Buffer) error {

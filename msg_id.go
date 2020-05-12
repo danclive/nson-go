@@ -41,8 +41,8 @@ func (self MessageId) Decode(buf *bytes.Buffer) (Value, error) {
 	return MessageId(b), nil
 }
 
-var lastCount uint32 = uint32(time.Now().Nanosecond())
-var identify uint32 = uint32(time.Now().Nanosecond())
+var lastCount = uint32(time.Now().Nanosecond())
+var identify = uint32(time.Now().Nanosecond())
 
 // Create unique incrementing MessageId.
 //

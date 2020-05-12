@@ -105,3 +105,11 @@ func (self Array) Decode(buf *bytes.Buffer) (Value, error) {
 
 	return array, nil
 }
+
+func (self *Array) Push(value Value) {
+	*self = append(*self, value)
+}
+
+func (self Array) IntoValue() Value {
+	return Value(self)
+}

@@ -163,19 +163,6 @@ func decode_value(buf *bytes.Buffer, tag uint8) (string, Value, error) {
 		}
 
 		return key, value, nil
-	case TAG_UTC_DATETIME:
-		key, err := readCstring(buf)
-
-		if err != nil {
-			return "", nil, err
-		}
-
-		value, err := UTCDateTime{}.Decode(buf)
-		if err != nil {
-			return "", nil, err
-		}
-
-		return key, value, nil
 	case TAG_MESSAGE_ID:
 		key, err := readCstring(buf)
 

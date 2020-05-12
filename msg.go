@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"time"
 )
 
 // Message
@@ -124,6 +123,12 @@ func (self *Message) Remove(key string) bool {
 	}
 
 	return has
+}
+
+func (self *Message) Extend(other Message) {
+	for k, v := range other {
+		(*self)[k] = v
+	}
 }
 
 func (self *Message) GetF32(key string) (float32, error) {
@@ -293,19 +298,6 @@ func (self *Message) GetTimestamp(key string) (int64, error) {
 	}
 
 	return int64(value.(Timestamp)), nil
-}
-
-func (self *Message) GetUTCDateTime(key string) (time.Time, error) {
-	value, has := self.Get(key)
-	if !has {
-		return time.Time{}, fmt.Errorf("Not Present, key: %v", key)
-	}
-
-	if value.Tag() != TAG_UTC_DATETIME {
-		return time.Time{}, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
-	}
-
-	return time.Time(value.(UTCDateTime)), nil
 }
 
 func (self *Message) GetMessageId(key string) (MessageId, error) {

@@ -7,10 +7,7 @@ import (
 )
 
 func TestEncodeDecode(t *testing.T) {
-	mid, err := NewMessageId()
-	if err != nil {
-		t.Fatal(err)
-	}
+	mid := NewMessageId()
 
 	message := Message{
 		"a": F32(123.123),
@@ -34,7 +31,7 @@ func TestEncodeDecode(t *testing.T) {
 
 	buf := new(bytes.Buffer)
 
-	err = message.Encode(buf)
+	err := message.Encode(buf)
 	if err != nil {
 		t.Fatal(err)
 	}

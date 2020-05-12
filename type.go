@@ -2,7 +2,6 @@ package nson
 
 import (
 	"bytes"
-	"time"
 )
 
 type Value interface {
@@ -36,8 +35,6 @@ type Null struct{}
 
 type Binary []byte
 
-type Timestamp int64
-
-type UTCDateTime time.Time
+type Timestamp uint64
 
 type MessageId []byte

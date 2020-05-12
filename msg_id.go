@@ -2,12 +2,11 @@ package nson
 
 import (
 	"bytes"
-	"crypto/md5"
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"io"
-	"os"
+	"math/rand"
 	"sync/atomic"
 	"time"
 )
@@ -21,8 +20,8 @@ func (self MessageId) String() string {
 }
 
 func (self MessageId) Encode(buf *bytes.Buffer) error {
-	if len(self) != 12 {
-		return fmt.Errorf("MessageId must be 12 bytes: %v", self)
+	if len(self) != 16 {
+		return fmt.Errorf("MessageId must be 16 bytes: %v", self)
 	}
 
 	if _, err := buf.Write(self); err != nil {
@@ -33,7 +32,7 @@ func (self MessageId) Encode(buf *bytes.Buffer) error {
 }
 
 func (self MessageId) Decode(buf *bytes.Buffer) (Value, error) {
-	b := make([]byte, 12)
+	b := make([]byte, 16)
 	_, err := io.ReadFull(buf, b)
 	if err != nil {
 		return nil, err
@@ -42,51 +41,35 @@ func (self MessageId) Decode(buf *bytes.Buffer) (Value, error) {
 	return MessageId(b), nil
 }
 
-var lastCount int32 = int32(time.Now().UnixNano())
+var lastCount uint32 = uint32(time.Now().Nanosecond())
+var identify uint32 = uint32(time.Now().Nanosecond())
 
 // Create unique incrementing MessageId.
 //
-//   +---+---+---+---+---+---+---+---+---+---+---+---+
-//   |       A       |     B     |   C   |     D     |
-//   +---+---+---+---+---+---+---+---+---+---+---+---+
-//     0   1   2   3   4   5   6   7   8   9  10  11
-//   A = unix time (big endian), B = machine ID (first 3 bytes of md5 host name),
-//   C = PID, D = incrementing counter (big endian)
-func NewMessageId() (MessageId, error) {
+//   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+//   |       timestamp       | count |    random     |   identify    |
+//   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+//     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
+func NewMessageId() MessageId {
 	buf := new(bytes.Buffer)
 
-	// A
-	if err := binary.Write(buf, binary.BigEndian, uint32(time.Now().Unix())); err != nil {
-		return nil, err
-	}
+	// timestamp
+	now := time.Now().UnixNano() / 1000000
+	now_bytes := Uint64To4Bytes(uint64(now), true)
+	binary.Write(buf, binary.BigEndian, now_bytes[2:])
 
-	// B
-	name, err := os.Hostname()
-	if err != nil {
-		return nil, err
-	}
-	hash := md5.New()
-	if _, err := hash.Write([]byte(name)); err != nil {
-		return nil, err
-	}
-	if _, err := buf.Write(hash.Sum(nil)[:3]); err != nil {
-		return nil, err
-	}
+	// count
+	cnt := atomic.AddUint32(&lastCount, 1) % 65536
+	binary.Write(buf, binary.BigEndian, uint16(cnt))
 
-	// C
-	if err := binary.Write(buf, binary.BigEndian, int16(os.Getpid())); err != nil {
-		return nil, err
-	}
+	// random
+	random := rand.Uint32()
+	binary.Write(buf, binary.BigEndian, random)
 
-	// D
-	cnt := atomic.AddInt32(&lastCount, 1) % 16777215
-	cntbuf := make([]byte, 4)
-	binary.BigEndian.PutUint32(cntbuf, uint32(cnt))
-	if _, err := buf.Write(cntbuf[1:]); err != nil {
-		return nil, err
-	}
+	// identify
+	binary.Write(buf, binary.BigEndian, identify)
 
-	return MessageId(buf.Bytes()), nil
+	return MessageId(buf.Bytes())
 }
 
 func MessageIdFromHex(s string) (MessageId, error) {
@@ -103,9 +86,35 @@ func (self MessageId) Hex() string {
 }
 
 func (self MessageId) Timestamp() int64 {
-	return int64(binary.BigEndian.Uint32([]byte(self)[:4]))
+	a := uint64(binary.BigEndian.Uint32([]byte(self)[:4]))
+	b := uint64(binary.BigEndian.Uint16([]byte(self)[4:6]))
+
+	return int64(a<<16 + b)
 }
 
 func (self MessageId) Time() time.Time {
 	return time.Unix(self.Timestamp(), 0).UTC()
+}
+
+func (self MessageId) Counter() uint16 {
+	return uint16(binary.BigEndian.Uint16([]byte(self)[6:8]))
+}
+
+func (self MessageId) Random() uint32 {
+	return uint32(binary.BigEndian.Uint32([]byte(self)[8:12]))
+}
+
+func (self MessageId) Identify() uint32 {
+	return uint32(binary.BigEndian.Uint32([]byte(self)[12:]))
+}
+
+// uint64 to 8 bytes
+func Uint64To4Bytes(i uint64, isbig bool) []byte {
+	buf := bytes.NewBuffer([]byte{})
+	if isbig {
+		binary.Write(buf, binary.BigEndian, i)
+	} else {
+		binary.Write(buf, binary.LittleEndian, i)
+	}
+	return buf.Bytes()
 }

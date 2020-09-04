@@ -20,8 +20,8 @@ func (self MessageId) String() string {
 }
 
 func (self MessageId) Encode(buf *bytes.Buffer) error {
-	if len(self) != 16 {
-		return fmt.Errorf("MessageId must be 16 bytes: %v", self)
+	if len(self) != 12 {
+		return fmt.Errorf("MessageId must be 12 bytes: %v", self)
 	}
 
 	if _, err := buf.Write(self); err != nil {
@@ -32,7 +32,7 @@ func (self MessageId) Encode(buf *bytes.Buffer) error {
 }
 
 func (self MessageId) Decode(buf *bytes.Buffer) (Value, error) {
-	b := make([]byte, 16)
+	b := make([]byte, 12)
 	_, err := io.ReadFull(buf, b)
 	if err != nil {
 		return nil, err
@@ -46,16 +46,16 @@ var identify = uint32(time.Now().Nanosecond())
 
 // Create unique incrementing MessageId.
 //
-//   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-//   |       timestamp       | count |    random     |   identify    |
-//   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-//     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
+//   +---+---+---+---+---+---+---+---+---+---+---+---+
+//   |       timestamp       | count |    random     |
+//   +---+---+---+---+---+---+---+---+---+---+---+---+
+//     0   1   2   3   4   5   6   7   8   9   10  11
 func NewMessageId() MessageId {
 	buf := new(bytes.Buffer)
 
 	// timestamp
 	now := time.Now().UnixNano() / 1000000
-	now_bytes := Uint64To4Bytes(uint64(now), true)
+	now_bytes := Uint64To4Bytes(uint64(now))
 	binary.Write(buf, binary.BigEndian, now_bytes[2:])
 
 	// count
@@ -65,9 +65,6 @@ func NewMessageId() MessageId {
 	// random
 	random := rand.Uint32()
 	binary.Write(buf, binary.BigEndian, random)
-
-	// identify
-	binary.Write(buf, binary.BigEndian, identify)
 
 	return MessageId(buf.Bytes())
 }
@@ -101,20 +98,12 @@ func (self MessageId) Counter() uint16 {
 }
 
 func (self MessageId) Random() uint32 {
-	return uint32(binary.BigEndian.Uint32([]byte(self)[8:12]))
-}
-
-func (self MessageId) Identify() uint32 {
-	return uint32(binary.BigEndian.Uint32([]byte(self)[12:]))
+	return uint32(binary.BigEndian.Uint32([]byte(self)[8:]))
 }
 
 // uint64 to 8 bytes
-func Uint64To4Bytes(i uint64, isbig bool) []byte {
+func Uint64To4Bytes(i uint64) []byte {
 	buf := bytes.NewBuffer([]byte{})
-	if isbig {
-		binary.Write(buf, binary.BigEndian, i)
-	} else {
-		binary.Write(buf, binary.LittleEndian, i)
-	}
+	binary.Write(buf, binary.BigEndian, i)
 	return buf.Bytes()
 }

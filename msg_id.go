@@ -70,6 +70,10 @@ func NewMessageId() MessageId {
 }
 
 func MessageIdFromHex(s string) (MessageId, error) {
+	if len(s) != 24 {
+		return nil, fmt.Errorf("MessageId hex must be 24 chars: %v", s)
+	}
+
 	b, err := hex.DecodeString(s)
 	if err != nil {
 		return nil, err

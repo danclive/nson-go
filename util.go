@@ -3,6 +3,7 @@ package nson
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"io"
 )
 
@@ -14,13 +15,13 @@ func writeCstring(buf *bytes.Buffer, s string) error {
 }
 
 func writeString(buf *bytes.Buffer, s string) error {
-	if err := binary.Write(buf, binary.LittleEndian, uint32(len(s)+1)); err != nil {
+	if err := binary.Write(buf, binary.LittleEndian, uint32(len(s)+4)); err != nil {
 		return err
 	}
 	if _, err := buf.WriteString(s); err != nil {
 		return err
 	}
-	return buf.WriteByte(0x00)
+	return nil
 }
 
 func writeFloat32(buf *bytes.Buffer, f float32) error {
@@ -57,20 +58,25 @@ func readCstring(rd *bytes.Buffer) (string, error) {
 
 func readString(rd *bytes.Buffer) (string, error) {
 	// Read string length.
-	var sLen int32
-	if err := binary.Read(rd, binary.LittleEndian, &sLen); err != nil {
+	var l uint32
+	if err := binary.Read(rd, binary.LittleEndian, &l); err != nil {
 		return "", err
 	}
-	if sLen == 0 {
-		return "", nil
+
+	if l < MIN_NSON_SIZE {
+		return "", errors.New("Invalid string length")
+	}
+
+	if l > MAX_NSON_SIZE {
+		return "", errors.New("Invalid string length")
 	}
 
 	// Read string.
-	b := make([]byte, sLen)
+	b := make([]byte, l-4)
 	if _, err := io.ReadFull(rd, b); err != nil {
 		return "", err
 	}
-	return string(b[:len(b)-1]), nil
+	return string(b[:len(b)]), nil
 }
 
 func readFloat32(rd *bytes.Buffer) (float32, error) {

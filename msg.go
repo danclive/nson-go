@@ -3,6 +3,7 @@ package nson
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 )
 
@@ -37,7 +38,7 @@ func (self Message) String() string {
 func (self Message) Encode(buff *bytes.Buffer) error {
 	buf := new(bytes.Buffer)
 
-	if err := writeInt32(buf, 0); err != nil {
+	if err := writeUint32(buf, 0); err != nil {
 		return err
 	}
 
@@ -69,9 +70,17 @@ func (self Message) Encode(buff *bytes.Buffer) error {
 }
 
 func (self Message) Decode(buf *bytes.Buffer) (Value, error) {
-	_, err := readInt32(buf)
+	l, err := readUint32(buf)
 	if err != nil {
 		return nil, err
+	}
+
+	if l < MIN_NSON_SIZE {
+		return nil, errors.New("Invalid message length")
+	}
+
+	if l > MAX_NSON_SIZE {
+		return nil, errors.New("Invalid message length")
 	}
 
 	msg := Message{}
@@ -86,7 +95,13 @@ func (self Message) Decode(buf *bytes.Buffer) (Value, error) {
 			break
 		}
 
-		key, value, err := decode_value(buf, tag)
+		key, err := readCstring(buf)
+
+		if err != nil {
+			return nil, err
+		}
+
+		value, err := decode_value(buf, tag)
 		if err != nil {
 			return nil, err
 		}

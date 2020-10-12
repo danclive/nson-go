@@ -97,14 +97,6 @@ func (self MessageId) Time() time.Time {
 	return time.Unix(self.Timestamp(), 0).UTC()
 }
 
-func (self MessageId) Counter() uint16 {
-	return uint16(binary.BigEndian.Uint16([]byte(self)[6:8]))
-}
-
-func (self MessageId) Random() uint32 {
-	return uint32(binary.BigEndian.Uint32([]byte(self)[8:]))
-}
-
 // uint64 to 8 bytes
 func Uint64To4Bytes(i uint64) []byte {
 	buf := bytes.NewBuffer([]byte{})

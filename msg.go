@@ -101,7 +101,7 @@ func (self Message) Decode(buf *bytes.Buffer) (Value, error) {
 			return nil, err
 		}
 
-		value, err := decode_value(buf, tag)
+		value, err := DecodeValue(buf, tag)
 		if err != nil {
 			return nil, err
 		}

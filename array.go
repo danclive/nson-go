@@ -79,7 +79,7 @@ func (self Array) Decode(buf *bytes.Buffer) (Value, error) {
 			break
 		}
 
-		value, err := decode_value(buf, tag)
+		value, err := DecodeValue(buf, tag)
 		if err != nil {
 			return nil, err
 		}

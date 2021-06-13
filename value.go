@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func decode_value(buf *bytes.Buffer, tag uint8) (Value, error) {
+func DecodeValue(buf *bytes.Buffer, tag uint8) (Value, error) {
 	switch tag {
 	case TAG_F32:
 		value, err := F32(0).Decode(buf)

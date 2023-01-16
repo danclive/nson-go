@@ -7,11 +7,19 @@ import (
 	"io"
 )
 
-func writeCstring(buf *bytes.Buffer, s string) error {
+func writeKey(buf *bytes.Buffer, s string) error {
+	if len(s) == 0 || len(s) >= 255 {
+		return errors.New("Key len must > 0 and < 255")
+	}
+
+	if err := binary.Write(buf, binary.LittleEndian, uint8(len(s)+1)); err != nil {
+		return err
+	}
 	if _, err := buf.WriteString(s); err != nil {
 		return err
 	}
-	return buf.WriteByte(0x00)
+
+	return nil
 }
 
 func writeString(buf *bytes.Buffer, s string) error {
@@ -48,13 +56,13 @@ func writeUint64(buf *bytes.Buffer, u uint64) error {
 	return binary.Write(buf, binary.LittleEndian, u)
 }
 
-func readCstring(rd *bytes.Buffer) (string, error) {
-	s, err := rd.ReadString(0x00)
-	if err != nil {
-		return "", err
-	}
-	return s[:len(s)-1], nil
-}
+// func readCstring(rd *bytes.Buffer) (string, error) {
+// 	s, err := rd.ReadString(0x00)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return s[:len(s)-1], nil
+// }
 
 func readString(rd *bytes.Buffer) (string, error) {
 	// Read string length.
@@ -76,7 +84,7 @@ func readString(rd *bytes.Buffer) (string, error) {
 	if _, err := io.ReadFull(rd, b); err != nil {
 		return "", err
 	}
-	return string(b[:len(b)]), nil
+	return string(b), nil
 }
 
 func readFloat32(rd *bytes.Buffer) (float32, error) {

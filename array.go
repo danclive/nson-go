@@ -39,11 +39,7 @@ func (self Array) Encode(buff *bytes.Buffer) error {
 	}
 
 	for _, v := range self {
-		if err := buf.WriteByte(v.Tag()); err != nil {
-			return err
-		}
-
-		if err := v.Encode(buf); err != nil {
+		if err := EncodeValue(buf, v); err != nil {
 			return err
 		}
 	}
@@ -79,7 +75,7 @@ func (self Array) Decode(buf *bytes.Buffer) (Value, error) {
 			break
 		}
 
-		value, err := DecodeValue(buf, tag)
+		value, err := decodeValueWithTag(buf, tag)
 		if err != nil {
 			return nil, err
 		}

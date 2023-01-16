@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"io"
 )
 
 // Message
@@ -43,15 +44,11 @@ func (self Message) Encode(buff *bytes.Buffer) error {
 	}
 
 	for k, v := range self {
-		if err := buf.WriteByte(v.Tag()); err != nil {
+		if err := writeKey(buf, k); err != nil {
 			return err
 		}
 
-		if err := writeCstring(buf, k); err != nil {
-			return err
-		}
-
-		if err := v.Encode(buf); err != nil {
+		if err := EncodeValue(buf, v); err != nil {
 			return err
 		}
 	}
@@ -86,22 +83,23 @@ func (self Message) Decode(buf *bytes.Buffer) (Value, error) {
 	msg := Message{}
 
 	for {
-		tag, err := buf.ReadByte()
+		len, err := buf.ReadByte()
 		if err != nil {
 			return nil, err
 		}
 
-		if tag == 0 {
+		if len == 0 {
 			break
 		}
 
-		key, err := readCstring(buf)
-
-		if err != nil {
+		b := make([]byte, len-1)
+		if _, err := io.ReadFull(buf, b); err != nil {
 			return nil, err
 		}
 
-		value, err := DecodeValue(buf, tag)
+		key := string(b)
+
+		value, err := DecodeValue(buf)
 		if err != nil {
 			return nil, err
 		}

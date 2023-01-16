@@ -5,7 +5,24 @@ import (
 	"fmt"
 )
 
-func DecodeValue(buf *bytes.Buffer, tag uint8) (Value, error) {
+func EncodeValue(buf *bytes.Buffer, value Value) error {
+	if err := buf.WriteByte(value.Tag()); err != nil {
+		return err
+	}
+
+	return value.Encode(buf)
+}
+
+func DecodeValue(buf *bytes.Buffer) (Value, error) {
+	tag, err := buf.ReadByte()
+	if err != nil {
+		return nil, err
+	}
+
+	return decodeValueWithTag(buf, tag)
+}
+
+func decodeValueWithTag(buf *bytes.Buffer, tag uint8) (Value, error) {
 	switch tag {
 	case TAG_F32:
 		value, err := F32(0).Decode(buf)

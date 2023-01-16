@@ -94,7 +94,8 @@ func (self MessageId) Timestamp() int64 {
 }
 
 func (self MessageId) Time() time.Time {
-	return time.Unix(self.Timestamp(), 0).UTC()
+	ts := self.Timestamp()
+	return time.Unix(ts/1000, ts%1000*1000000).UTC()
 }
 
 // uint64 to 8 bytes

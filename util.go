@@ -12,7 +12,7 @@ func writeKey(buf *bytes.Buffer, s string) error {
 		return errors.New("Key len must > 0 and < 255")
 	}
 
-	if err := binary.Write(buf, binary.LittleEndian, uint8(len(s)+1)); err != nil {
+	if err := buf.WriteByte(uint8(len(s) + 1)); err != nil {
 		return err
 	}
 	if _, err := buf.WriteString(s); err != nil {

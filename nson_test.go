@@ -20,7 +20,7 @@ func TestEncodeDecode(t *testing.T) {
 		"g": U32(3),
 		"h": U64(4),
 		"i": String("aaa"),
-		"j": Array{F32(666.777)},
+		"j": Array{F32(666.777), String("hello")},
 		"k": Bool(false),
 		"l": Null{},
 		"m": Binary{1, 2, 3, 4, 5, 6},

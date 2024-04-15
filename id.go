@@ -11,17 +11,17 @@ import (
 	"time"
 )
 
-func (self MessageId) Tag() uint8 {
-	return TAG_MESSAGE_ID
+func (self Id) Tag() uint8 {
+	return TAG_ID
 }
 
-func (self MessageId) String() string {
-	return fmt.Sprintf("MessageId(%x)", []byte(self))
+func (self Id) String() string {
+	return fmt.Sprintf("Id(%x)", []byte(self))
 }
 
-func (self MessageId) Encode(buf *bytes.Buffer) error {
+func (self Id) Encode(buf *bytes.Buffer) error {
 	if len(self) != 12 {
-		return fmt.Errorf("MessageId must be 12 bytes: %v", self)
+		return fmt.Errorf("Id must be 12 bytes: %v", self)
 	}
 
 	if _, err := buf.Write(self); err != nil {
@@ -31,26 +31,26 @@ func (self MessageId) Encode(buf *bytes.Buffer) error {
 	return nil
 }
 
-func (self MessageId) Decode(buf *bytes.Buffer) (Value, error) {
+func (self Id) Decode(buf *bytes.Buffer) (Value, error) {
 	b := make([]byte, 12)
 	_, err := io.ReadFull(buf, b)
 	if err != nil {
 		return nil, err
 	}
 
-	return MessageId(b), nil
+	return Id(b), nil
 }
 
 var lastCount = uint32(time.Now().Nanosecond())
 var identify = uint32(time.Now().Nanosecond())
 
-// Create unique incrementing MessageId.
+// Create unique incrementing Id.
 //
-//   +---+---+---+---+---+---+---+---+---+---+---+---+
-//   |       timestamp       | count |    random     |
-//   +---+---+---+---+---+---+---+---+---+---+---+---+
-//     0   1   2   3   4   5   6   7   8   9   10  11
-func NewMessageId() MessageId {
+//	+---+---+---+---+---+---+---+---+---+---+---+---+
+//	|       timestamp       | count |    random     |
+//	+---+---+---+---+---+---+---+---+---+---+---+---+
+//	  0   1   2   3   4   5   6   7   8   9   10  11
+func NewId() Id {
 	buf := new(bytes.Buffer)
 
 	// timestamp
@@ -66,12 +66,12 @@ func NewMessageId() MessageId {
 	random := rand.Uint32()
 	binary.Write(buf, binary.BigEndian, random)
 
-	return MessageId(buf.Bytes())
+	return Id(buf.Bytes())
 }
 
-func MessageIdFromHex(s string) (MessageId, error) {
+func IdFromHex(s string) (Id, error) {
 	if len(s) != 24 {
-		return nil, fmt.Errorf("MessageId hex must be 24 chars: %v", s)
+		return nil, fmt.Errorf("Id hex must be 24 chars: %v", s)
 	}
 
 	b, err := hex.DecodeString(s)
@@ -79,21 +79,21 @@ func MessageIdFromHex(s string) (MessageId, error) {
 		return nil, err
 	}
 
-	return MessageId(b), nil
+	return Id(b), nil
 }
 
-func (self MessageId) Hex() string {
+func (self Id) Hex() string {
 	return hex.EncodeToString([]byte(self))
 }
 
-func (self MessageId) Timestamp() int64 {
+func (self Id) Timestamp() int64 {
 	a := uint64(binary.BigEndian.Uint32([]byte(self)[:4]))
 	b := uint64(binary.BigEndian.Uint16([]byte(self)[4:6]))
 
 	return int64(a<<16 + b)
 }
 
-func (self MessageId) Time() time.Time {
+func (self Id) Time() time.Time {
 	ts := self.Timestamp()
 	return time.Unix(ts/1000, ts%1000*1000000).UTC()
 }

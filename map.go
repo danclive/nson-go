@@ -9,14 +9,14 @@ import (
 )
 
 // Message
-func (self Message) Tag() uint8 {
-	return TAG_MESSAGE
+func (self Map) Tag() uint8 {
+	return TAG_MAP
 }
 
-func (self Message) String() string {
+func (self Map) String() string {
 	buf := new(bytes.Buffer)
 
-	fmt.Fprintf(buf, "Message{")
+	fmt.Fprintf(buf, "Map{")
 
 	l := len(self)
 	i := 0
@@ -36,7 +36,7 @@ func (self Message) String() string {
 	return buf.String()
 }
 
-func (self Message) Encode(buff *bytes.Buffer) error {
+func (self Map) Encode(buff *bytes.Buffer) error {
 	buf := new(bytes.Buffer)
 
 	if err := writeUint32(buf, 0); err != nil {
@@ -66,21 +66,21 @@ func (self Message) Encode(buff *bytes.Buffer) error {
 	return nil
 }
 
-func (self Message) Decode(buf *bytes.Buffer) (Value, error) {
+func (self Map) Decode(buf *bytes.Buffer) (Value, error) {
 	l, err := readUint32(buf)
 	if err != nil {
 		return nil, err
 	}
 
 	if l < MIN_NSON_SIZE {
-		return nil, errors.New("Invalid message length")
+		return nil, errors.New("Invalid map length")
 	}
 
 	if l > MAX_NSON_SIZE {
-		return nil, errors.New("Invalid message length")
+		return nil, errors.New("Invalid map length")
 	}
 
-	msg := Message{}
+	msg := Map{}
 
 	for {
 		len, err := buf.ReadByte()
@@ -110,25 +110,25 @@ func (self Message) Decode(buf *bytes.Buffer) (Value, error) {
 	return msg, nil
 }
 
-func (self *Message) Get(key string) (Value, bool) {
+func (self *Map) Get(key string) (Value, bool) {
 	value, has := (*self)[key]
 	return value, has
 }
 
-func (self *Message) Contains(key string) bool {
+func (self *Map) Contains(key string) bool {
 	_, has := (*self)[key]
 	return has
 }
 
-func (self *Message) Len() int {
+func (self *Map) Len() int {
 	return len(*self)
 }
 
-func (self *Message) Insert(key string, value Value) {
+func (self *Map) Insert(key string, value Value) {
 	(*self)[key] = value
 }
 
-func (self *Message) Remove(key string) bool {
+func (self *Map) Remove(key string) bool {
 	has := self.Contains(key)
 
 	if has {
@@ -138,13 +138,13 @@ func (self *Message) Remove(key string) bool {
 	return has
 }
 
-func (self *Message) Extend(other Message) {
+func (self *Map) Extend(other Map) {
 	for k, v := range other {
 		(*self)[k] = v
 	}
 }
 
-func (self *Message) GetF32(key string) (float32, error) {
+func (self *Map) GetF32(key string) (float32, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -157,7 +157,7 @@ func (self *Message) GetF32(key string) (float32, error) {
 	return float32(value.(F32)), nil
 }
 
-func (self *Message) GetF64(key string) (float64, error) {
+func (self *Map) GetF64(key string) (float64, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -170,7 +170,7 @@ func (self *Message) GetF64(key string) (float64, error) {
 	return float64(value.(F64)), nil
 }
 
-func (self *Message) GetI32(key string) (int32, error) {
+func (self *Map) GetI32(key string) (int32, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -183,7 +183,7 @@ func (self *Message) GetI32(key string) (int32, error) {
 	return int32(value.(I32)), nil
 }
 
-func (self *Message) GetU32(key string) (uint32, error) {
+func (self *Map) GetU32(key string) (uint32, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -196,7 +196,7 @@ func (self *Message) GetU32(key string) (uint32, error) {
 	return uint32(value.(U32)), nil
 }
 
-func (self *Message) GetI64(key string) (int64, error) {
+func (self *Map) GetI64(key string) (int64, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -209,7 +209,7 @@ func (self *Message) GetI64(key string) (int64, error) {
 	return int64(value.(I64)), nil
 }
 
-func (self *Message) GetU64(key string) (uint64, error) {
+func (self *Map) GetU64(key string) (uint64, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -222,7 +222,7 @@ func (self *Message) GetU64(key string) (uint64, error) {
 	return uint64(value.(U64)), nil
 }
 
-func (self *Message) GetString(key string) (string, error) {
+func (self *Map) GetString(key string) (string, error) {
 	value, has := self.Get(key)
 	if !has {
 		return "", fmt.Errorf("Not Present, key: %v", key)
@@ -235,7 +235,7 @@ func (self *Message) GetString(key string) (string, error) {
 	return string(value.(String)), nil
 }
 
-func (self *Message) GetArray(key string) (Array, error) {
+func (self *Map) GetArray(key string) (Array, error) {
 	value, has := self.Get(key)
 	if !has {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
@@ -248,20 +248,20 @@ func (self *Message) GetArray(key string) (Array, error) {
 	return value.(Array), nil
 }
 
-func (self *Message) GetMessage(key string) (Message, error) {
+func (self *Map) GetMap(key string) (Map, error) {
 	value, has := self.Get(key)
 	if !has {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_MESSAGE {
+	if value.Tag() != TAG_MAP {
 		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
-	return value.(Message), nil
+	return value.(Map), nil
 }
 
-func (self *Message) GetBool(key string) (bool, error) {
+func (self *Map) GetBool(key string) (bool, error) {
 	value, has := self.Get(key)
 	if !has {
 		return false, fmt.Errorf("Not Present, key: %v", key)
@@ -274,7 +274,7 @@ func (self *Message) GetBool(key string) (bool, error) {
 	return bool(value.(Bool)), nil
 }
 
-func (self *Message) IsNull(key string) bool {
+func (self *Map) IsNull(key string) bool {
 	value, has := self.Get(key)
 	if !has {
 		return false
@@ -287,7 +287,7 @@ func (self *Message) IsNull(key string) bool {
 	return true
 }
 
-func (self *Message) GetBinary(key string) ([]byte, error) {
+func (self *Map) GetBinary(key string) ([]byte, error) {
 	value, has := self.Get(key)
 	if !has {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
@@ -300,7 +300,7 @@ func (self *Message) GetBinary(key string) ([]byte, error) {
 	return []byte(value.(Binary)), nil
 }
 
-func (self *Message) GetTimestamp(key string) (int64, error) {
+func (self *Map) GetTimestamp(key string) (int64, error) {
 	value, has := self.Get(key)
 	if !has {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
@@ -313,15 +313,15 @@ func (self *Message) GetTimestamp(key string) (int64, error) {
 	return int64(value.(Timestamp)), nil
 }
 
-func (self *Message) GetMessageId(key string) (MessageId, error) {
+func (self *Map) GetMapId(key string) (Id, error) {
 	value, has := self.Get(key)
 	if !has {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_MESSAGE_ID {
+	if value.Tag() != TAG_ID {
 		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
-	return value.(MessageId), nil
+	return value.(Id), nil
 }

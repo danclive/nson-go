@@ -108,15 +108,15 @@ func decodeValueWithTag(buf *bytes.Buffer, tag uint8) (Value, error) {
 		}
 
 		return value, nil
-	case TAG_MESSAGE_ID:
-		value, err := MessageId{}.Decode(buf)
+	case TAG_ID:
+		value, err := Id{}.Decode(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_MESSAGE:
-		value, err := Message{}.Decode(buf)
+	case TAG_MAP:
+		value, err := Map{}.Decode(buf)
 		if err != nil {
 			return nil, err
 		}

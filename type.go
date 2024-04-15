@@ -11,7 +11,7 @@ type Value interface {
 	Decode(*bytes.Buffer) (Value, error)
 }
 
-type Message map[string]Value
+type Map map[string]Value
 
 type F32 float32
 
@@ -37,4 +37,10 @@ type Binary []byte
 
 type Timestamp uint64
 
-type MessageId []byte
+type Id []byte
+
+// Deprecated: use Map
+type Message = Map
+
+// Deprecated: use Id
+type MessageId = Id

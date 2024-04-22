@@ -2,6 +2,7 @@ package nson
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -57,4 +58,16 @@ func TestEncodeDecode(t *testing.T) {
 
 	_ = m3
 	// fmt.Println(m3)
+
+	aa := Map{
+		"aa": String("bb"),
+		"cc": Array{I32(1), I32(2), I32(3), I32(4)},
+	}
+
+	bufaa := new(bytes.Buffer)
+	err = aa.Encode(bufaa)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(bufaa.Bytes())
 }

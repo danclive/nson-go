@@ -14,8 +14,6 @@ func (m Map) Read(reader io.Reader) (Map, error) {
 		return nil, err
 	}
 
-	fmt.Println(lengthBytes)
-
 	dataLength := binary.LittleEndian.Uint32(lengthBytes)
 	if dataLength < 5 || dataLength > MAX_NSON_SIZE {
 		return nil, errors.New("invalid data length")

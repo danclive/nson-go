@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
 )
 
@@ -13,8 +12,6 @@ func (m Map) Read(reader io.Reader) (Map, error) {
 	if _, err := io.ReadFull(reader, lengthBytes); err != nil {
 		return nil, err
 	}
-
-	fmt.Println(lengthBytes)
 
 	dataLength := binary.LittleEndian.Uint32(lengthBytes)
 	if dataLength < 5 || dataLength > MAX_NSON_SIZE {

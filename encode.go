@@ -12,12 +12,7 @@ func (m Map) Write(writer io.Writer) error {
 		return err
 	}
 
-	_, err = writer.Write(buffer.Bytes())
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return writeAll(writer, buffer.Bytes())
 }
 
 func (a Array) Write(writer io.Writer) error {
@@ -27,10 +22,17 @@ func (a Array) Write(writer io.Writer) error {
 		return err
 	}
 
-	_, err = writer.Write(buffer.Bytes())
-	if err != nil {
-		return err
-	}
+	return writeAll(writer, buffer.Bytes())
+}
 
+func writeAll(writer io.Writer, data []byte) error {
+	remaining := data
+	for len(remaining) > 0 {
+		n, err := writer.Write(remaining)
+		if err != nil {
+			return err
+		}
+		remaining = remaining[n:]
+	}
 	return nil
 }

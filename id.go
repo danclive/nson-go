@@ -19,28 +19,6 @@ func (self Id) String() string {
 	return fmt.Sprintf("Id(%x)", []byte(self))
 }
 
-func (self Id) Encode(buf *bytes.Buffer) error {
-	if len(self) != 12 {
-		return fmt.Errorf("Id must be 12 bytes: %v", self)
-	}
-
-	if _, err := buf.Write(self); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (self Id) Decode(buf *bytes.Buffer) (Value, error) {
-	b := make([]byte, 12)
-	_, err := io.ReadFull(buf, b)
-	if err != nil {
-		return nil, err
-	}
-
-	return Id(b), nil
-}
-
 var lastCount = uint32(time.Now().Nanosecond())
 var identify = uint32(time.Now().Nanosecond())
 
@@ -103,4 +81,26 @@ func Uint64To4Bytes(i uint64) []byte {
 	buf := bytes.NewBuffer([]byte{})
 	binary.Write(buf, binary.BigEndian, i)
 	return buf.Bytes()
+}
+
+func EncodeId(value Id, buf *bytes.Buffer) error {
+	if len(value) != 12 {
+		return fmt.Errorf("Id must be 12 bytes: %v", value)
+	}
+
+	if _, err := buf.Write(value); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DecodeId(buf *bytes.Buffer) (Id, error) {
+	b := make([]byte, 12)
+	_, err := io.ReadFull(buf, b)
+	if err != nil {
+		return nil, err
+	}
+
+	return Id(b), nil
 }

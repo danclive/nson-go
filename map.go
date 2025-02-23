@@ -36,80 +36,6 @@ func (self Map) String() string {
 	return buf.String()
 }
 
-func (self Map) Encode(buff *bytes.Buffer) error {
-	buf := new(bytes.Buffer)
-
-	if err := writeUint32(buf, 0); err != nil {
-		return err
-	}
-
-	for k, v := range self {
-		if err := writeKey(buf, k); err != nil {
-			return err
-		}
-
-		if err := EncodeValue(buf, v); err != nil {
-			return err
-		}
-	}
-
-	if err := buf.WriteByte(0x00); err != nil {
-		return err
-	}
-
-	binary.LittleEndian.PutUint32(buf.Bytes(), uint32(buf.Len()))
-
-	if _, err := buf.WriteTo(buff); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (self Map) Decode(buf *bytes.Buffer) (Value, error) {
-	l, err := readUint32(buf)
-	if err != nil {
-		return nil, err
-	}
-
-	if l < MIN_NSON_SIZE {
-		return nil, errors.New("Invalid map length")
-	}
-
-	if l > MAX_NSON_SIZE {
-		return nil, errors.New("Invalid map length")
-	}
-
-	msg := Map{}
-
-	for {
-		len, err := buf.ReadByte()
-		if err != nil {
-			return nil, err
-		}
-
-		if len == 0 {
-			break
-		}
-
-		b := make([]byte, len-1)
-		if _, err := io.ReadFull(buf, b); err != nil {
-			return nil, err
-		}
-
-		key := string(b)
-
-		value, err := DecodeValue(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		msg[key] = value
-	}
-
-	return msg, nil
-}
-
 func (self *Map) Get(key string) (Value, bool) {
 	value, has := (*self)[key]
 	return value, has
@@ -324,4 +250,78 @@ func (self *Map) GetMapId(key string) (Id, error) {
 	}
 
 	return value.(Id), nil
+}
+
+func EncodeMap(m Map, buff *bytes.Buffer) error {
+	buf := new(bytes.Buffer)
+
+	if err := writeUint32(buf, 0); err != nil {
+		return err
+	}
+
+	for k, v := range m {
+		if err := writeKey(buf, k); err != nil {
+			return err
+		}
+
+		if err := EncodeValue(buf, v); err != nil {
+			return err
+		}
+	}
+
+	if err := buf.WriteByte(0x00); err != nil {
+		return err
+	}
+
+	binary.LittleEndian.PutUint32(buf.Bytes(), uint32(buf.Len()))
+
+	if _, err := buf.WriteTo(buff); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DecodeMap(buf *bytes.Buffer) (Map, error) {
+	l, err := readUint32(buf)
+	if err != nil {
+		return nil, err
+	}
+
+	if l < MIN_NSON_SIZE {
+		return nil, errors.New("Invalid map length")
+	}
+
+	if l > MAX_NSON_SIZE {
+		return nil, errors.New("Invalid map length")
+	}
+
+	msg := Map{}
+
+	for {
+		len, err := buf.ReadByte()
+		if err != nil {
+			return nil, err
+		}
+
+		if len == 0 {
+			break
+		}
+
+		b := make([]byte, len-1)
+		if _, err := io.ReadFull(buf, b); err != nil {
+			return nil, err
+		}
+
+		key := string(b)
+
+		value, err := DecodeValue(buf)
+		if err != nil {
+			return nil, err
+		}
+
+		msg[key] = value
+	}
+
+	return msg, nil
 }

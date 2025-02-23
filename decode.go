@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-func (m Map) Read(reader io.Reader) (Map, error) {
+func ReadMap(reader io.Reader) (Map, error) {
 	lengthBytes := make([]byte, 4)
 	if _, err := io.ReadFull(reader, lengthBytes); err != nil {
 		return nil, err
@@ -26,15 +26,15 @@ func (m Map) Read(reader io.Reader) (Map, error) {
 	copy(fullData[:4], lengthBytes)
 
 	dataBuffer := bytes.NewBuffer(fullData)
-	decodedValue, err := Map{}.Decode(dataBuffer)
+	m, err := DecodeMap(dataBuffer)
 	if err != nil {
 		return nil, err
 	}
 
-	return decodedValue.(Map), nil
+	return m, nil
 }
 
-func (a Array) Read(reader io.Reader) (Array, error) {
+func ReadArray(reader io.Reader) (Array, error) {
 	lengthBytes := make([]byte, 4)
 	if _, err := io.ReadFull(reader, lengthBytes); err != nil {
 		return nil, err
@@ -53,10 +53,10 @@ func (a Array) Read(reader io.Reader) (Array, error) {
 	copy(fullData[:4], lengthBytes)
 
 	dataBuffer := bytes.NewBuffer(fullData)
-	decodedValue, err := Array{}.Decode(dataBuffer)
+	array, err := DecodeArray(dataBuffer)
 	if err != nil {
 		return nil, err
 	}
 
-	return decodedValue.(Array), nil
+	return array, nil
 }

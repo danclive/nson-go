@@ -1,14 +1,8 @@
 package nson
 
-import (
-	"bytes"
-)
-
 type Value interface {
 	Tag() uint8
 	String() string
-	Encode(*bytes.Buffer) error
-	Decode(*bytes.Buffer) (Value, error)
 }
 
 type Map map[string]Value
@@ -38,9 +32,3 @@ type Binary []byte
 type Timestamp uint64
 
 type Id []byte
-
-// Deprecated: use Map
-type Message = Map
-
-// Deprecated: use Id
-type MessageId = Id

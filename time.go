@@ -14,14 +14,14 @@ func (self Timestamp) String() string {
 	return fmt.Sprintf("Timestamp(%v)", uint64(self))
 }
 
-func (self Timestamp) Encode(buf *bytes.Buffer) error {
-	return writeUint64(buf, uint64(self))
+func EncodeTimestamp(value Timestamp, buf *bytes.Buffer) error {
+	return writeUint64(buf, uint64(value))
 }
 
-func (self Timestamp) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeTimestamp(buf *bytes.Buffer) (Timestamp, error) {
 	v, err := readUint64(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return Timestamp(v), nil

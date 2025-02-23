@@ -10,10 +10,10 @@ func (self Null) String() string {
 	return "Null"
 }
 
-func (self Null) Encode(buf *bytes.Buffer) error {
+func EncodeNull(buf *bytes.Buffer) error {
 	return nil
 }
 
-func (self Null) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeNull(buf *bytes.Buffer) (Null, error) {
 	return Null{}, nil
 }

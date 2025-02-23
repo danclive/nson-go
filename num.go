@@ -14,14 +14,14 @@ func (self F32) String() string {
 	return fmt.Sprintf("F32(%v)", float32(self))
 }
 
-func (self F32) Encode(buf *bytes.Buffer) error {
-	return writeFloat32(buf, float32(self))
+func EncodeF32(value F32, buf *bytes.Buffer) error {
+	return writeFloat32(buf, float32(value))
 }
 
-func (self F32) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeF32(buf *bytes.Buffer) (F32, error) {
 	v, err := readFloat32(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return F32(v), nil
@@ -36,14 +36,14 @@ func (self F64) String() string {
 	return fmt.Sprintf("F32(%v)", float64(self))
 }
 
-func (self F64) Encode(buf *bytes.Buffer) error {
-	return writeFloat64(buf, float64(self))
+func EncodeF64(value F64, buf *bytes.Buffer) error {
+	return writeFloat64(buf, float64(value))
 }
 
-func (self F64) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeF64(buf *bytes.Buffer) (F64, error) {
 	v, err := readFloat64(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return F64(v), nil
@@ -58,14 +58,14 @@ func (self I32) String() string {
 	return fmt.Sprintf("I32(%v)", int32(self))
 }
 
-func (self I32) Encode(buf *bytes.Buffer) error {
-	return writeInt32(buf, int32(self))
+func EncodeI32(value I32, buf *bytes.Buffer) error {
+	return writeInt32(buf, int32(value))
 }
 
-func (self I32) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeI32(buf *bytes.Buffer) (I32, error) {
 	v, err := readInt32(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return I32(v), nil
@@ -80,14 +80,14 @@ func (self I64) String() string {
 	return fmt.Sprintf("I64(%v)", int64(self))
 }
 
-func (self I64) Encode(buf *bytes.Buffer) error {
-	return writeInt64(buf, int64(self))
+func EncodeI64(value I64, buf *bytes.Buffer) error {
+	return writeInt64(buf, int64(value))
 }
 
-func (self I64) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeI64(buf *bytes.Buffer) (I64, error) {
 	v, err := readInt64(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return I64(v), nil
@@ -102,14 +102,14 @@ func (self U32) String() string {
 	return fmt.Sprintf("U32(%v)", uint32(self))
 }
 
-func (self U32) Encode(buf *bytes.Buffer) error {
-	return writeUint32(buf, uint32(self))
+func EncodeU32(value U32, buf *bytes.Buffer) error {
+	return writeUint32(buf, uint32(value))
 }
 
-func (self U32) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeU32(buf *bytes.Buffer) (U32, error) {
 	v, err := readUint32(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return U32(v), nil
@@ -124,14 +124,14 @@ func (self U64) String() string {
 	return fmt.Sprintf("U64(%v)", uint64(self))
 }
 
-func (self U64) Encode(buf *bytes.Buffer) error {
-	return writeUint64(buf, uint64(self))
+func EncodeU64(value U64, buf *bytes.Buffer) error {
+	return writeUint64(buf, uint64(value))
 }
 
-func (self U64) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeU64(buf *bytes.Buffer) (U64, error) {
 	v, err := readUint64(buf)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return U64(v), nil

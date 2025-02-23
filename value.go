@@ -10,7 +10,38 @@ func EncodeValue(buf *bytes.Buffer, value Value) error {
 		return err
 	}
 
-	return value.Encode(buf)
+	switch v := value.(type) {
+	case F32:
+		return EncodeF32(v, buf)
+	case F64:
+		return EncodeF64(v, buf)
+	case I32:
+		return EncodeI32(v, buf)
+	case I64:
+		return EncodeI64(v, buf)
+	case U32:
+		return EncodeU32(v, buf)
+	case U64:
+		return EncodeU64(v, buf)
+	case String:
+		return EncodeString(v, buf)
+	case Array:
+		return EncodeArray(v, buf)
+	case Bool:
+		return EncodeBool(v, buf)
+	case Null:
+		return EncodeNull(buf)
+	case Binary:
+		return EncodeBinary(v, buf)
+	case Timestamp:
+		return EncodeTimestamp(v, buf)
+	case Id:
+		return EncodeId(v, buf)
+	case Map:
+		return EncodeMap(v, buf)
+	default:
+		return fmt.Errorf("Unsupported type '%X'", value.Tag())
+	}
 }
 
 func DecodeValue(buf *bytes.Buffer) (Value, error) {
@@ -25,98 +56,98 @@ func DecodeValue(buf *bytes.Buffer) (Value, error) {
 func decodeValueWithTag(buf *bytes.Buffer, tag uint8) (Value, error) {
 	switch tag {
 	case TAG_F32:
-		value, err := F32(0).Decode(buf)
+		value, err := DecodeF32(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_F64:
-		value, err := F64(0).Decode(buf)
+		value, err := DecodeF64(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_I32:
-		value, err := I32(0).Decode(buf)
+		value, err := DecodeI32(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_I64:
-		value, err := I64(0).Decode(buf)
+		value, err := DecodeI64(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_U32:
-		value, err := U32(0).Decode(buf)
+		value, err := DecodeU32(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_U64:
-		value, err := U64(0).Decode(buf)
+		value, err := DecodeU64(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_STRING:
-		value, err := String("").Decode(buf)
+		value, err := DecodeString(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_ARRAY:
-		value, err := Array{}.Decode(buf)
+		value, err := DecodeArray(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_BOOL:
-		value, err := Bool(false).Decode(buf)
+		value, err := DecodeBool(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_NULL:
-		value, err := Null{}.Decode(buf)
+		value, err := DecodeNull(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_BINARY:
-		value, err := Binary{}.Decode(buf)
+		value, err := DecodeBinary(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_TIMESTAMP:
-		value, err := Timestamp(0).Decode(buf)
+		value, err := DecodeTimestamp(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_ID:
-		value, err := Id{}.Decode(buf)
+		value, err := DecodeId(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
 	case TAG_MAP:
-		value, err := Map{}.Decode(buf)
+		value, err := DecodeMap(buf)
 		if err != nil {
 			return nil, err
 		}

@@ -5,9 +5,9 @@ import (
 	"io"
 )
 
-func (m Map) Write(writer io.Writer) error {
+func WriteMap(writer io.Writer, m Map) error {
 	buffer := new(bytes.Buffer)
-	err := m.Encode(buffer)
+	err := EncodeMap(m, buffer)
 	if err != nil {
 		return err
 	}
@@ -15,9 +15,9 @@ func (m Map) Write(writer io.Writer) error {
 	return writeAll(writer, buffer.Bytes())
 }
 
-func (a Array) Write(writer io.Writer) error {
+func WriteArray(writer io.Writer, a Array) error {
 	buffer := new(bytes.Buffer)
-	err := a.Encode(buffer)
+	err := EncodeArray(a, buffer)
 	if err != nil {
 		return err
 	}

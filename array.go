@@ -31,14 +31,22 @@ func (self Array) String() string {
 	return buf.String()
 }
 
-func (self Array) Encode(buff *bytes.Buffer) error {
+func (self *Array) Push(value Value) {
+	*self = append(*self, value)
+}
+
+func (self Array) IntoValue() Value {
+	return Value(self)
+}
+
+func EncodeArray(array Array, buff *bytes.Buffer) error {
 	buf := new(bytes.Buffer)
 
 	if err := writeUint32(buf, 0); err != nil {
 		return err
 	}
 
-	for _, v := range self {
+	for _, v := range array {
 		if err := EncodeValue(buf, v); err != nil {
 			return err
 		}
@@ -57,7 +65,7 @@ func (self Array) Encode(buff *bytes.Buffer) error {
 	return nil
 }
 
-func (self Array) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeArray(buf *bytes.Buffer) (Array, error) {
 	_, err := readUint32(buf)
 	if err != nil {
 		return nil, err
@@ -84,12 +92,4 @@ func (self Array) Decode(buf *bytes.Buffer) (Value, error) {
 	}
 
 	return array, nil
-}
-
-func (self *Array) Push(value Value) {
-	*self = append(*self, value)
-}
-
-func (self Array) IntoValue() Value {
-	return Value(self)
 }

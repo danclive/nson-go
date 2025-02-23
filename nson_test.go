@@ -30,12 +30,12 @@ func TestEncodeDecode(t *testing.T) {
 
 	buf := new(bytes.Buffer)
 
-	err := m.Encode(buf)
+	err := EncodeMap(m, buf)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	m2, err := Map{}.Decode(buf)
+	m2, err := DecodeMap(buf)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func TestEncodeDecode(t *testing.T) {
 	}
 
 	bufaa := new(bytes.Buffer)
-	err = aa.Encode(bufaa)
+	err = EncodeMap(aa, bufaa)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -79,13 +79,13 @@ func TestEncodeDecode2(t *testing.T) {
 
 	buff := new(bytes.Buffer)
 
-	m.Write(buff)
+	WriteMap(buff, m)
 
 	bts := buff.Bytes()
 
 	buff2 := bytes.NewBuffer(bts)
 
-	m2, err := Map{}.Read(buff2)
+	m2, err := ReadMap(buff2)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,8 +17,8 @@ func (self Bool) String() string {
 	return fmt.Sprint("False")
 }
 
-func (self Bool) Encode(buf *bytes.Buffer) error {
-	if self {
+func EncodeBool(value Bool, buf *bytes.Buffer) error {
+	if value {
 		if err := buf.WriteByte(0x01); err != nil {
 			return err
 		}
@@ -31,10 +31,10 @@ func (self Bool) Encode(buf *bytes.Buffer) error {
 	return nil
 }
 
-func (self Bool) Decode(buf *bytes.Buffer) (Value, error) {
+func DecodeBool(buf *bytes.Buffer) (Bool, error) {
 	b, err := buf.ReadByte()
 	if err != nil {
-		return nil, err
+		return false, err
 	}
 
 	return Bool(b == 0x01), nil

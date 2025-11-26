@@ -2,7 +2,6 @@ package nson
 
 import (
 	"bytes"
-	"fmt"
 )
 
 func (self Bool) Tag() uint8 {
@@ -11,10 +10,10 @@ func (self Bool) Tag() uint8 {
 
 func (self Bool) String() string {
 	if self {
-		return fmt.Sprint("True")
+		return "True"
 	}
 
-	return fmt.Sprint("False")
+	return "False"
 }
 
 func EncodeBool(value Bool, buf *bytes.Buffer) error {

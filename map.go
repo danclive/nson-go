@@ -9,7 +9,7 @@ import (
 )
 
 // Message
-func (self Map) Tag() uint8 {
+func (self Map) Tag() Tag {
 	return TAG_MAP
 }
 

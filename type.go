@@ -1,7 +1,7 @@
 package nson
 
 type Value interface {
-	Tag() uint8
+	Tag() Tag
 	String() string
 }
 
@@ -18,6 +18,14 @@ type I64 int64
 type U32 uint32
 
 type U64 uint64
+
+type U8 uint8
+
+type U16 uint16
+
+type I8 int8
+
+type I16 int16
 
 type String string
 

@@ -6,7 +6,7 @@ import (
 )
 
 // Float 32
-func (self F32) Tag() uint8 {
+func (self F32) Tag() Tag {
 	return TAG_F32
 }
 
@@ -28,7 +28,7 @@ func DecodeF32(buf *bytes.Buffer) (F32, error) {
 }
 
 // Float 64
-func (self F64) Tag() uint8 {
+func (self F64) Tag() Tag {
 	return TAG_F64
 }
 
@@ -50,7 +50,7 @@ func DecodeF64(buf *bytes.Buffer) (F64, error) {
 }
 
 // Int 32
-func (self I32) Tag() uint8 {
+func (self I32) Tag() Tag {
 	return TAG_I32
 }
 
@@ -72,7 +72,7 @@ func DecodeI32(buf *bytes.Buffer) (I32, error) {
 }
 
 // Int 64
-func (self I64) Tag() uint8 {
+func (self I64) Tag() Tag {
 	return TAG_I64
 }
 
@@ -94,7 +94,7 @@ func DecodeI64(buf *bytes.Buffer) (I64, error) {
 }
 
 // Uint 32
-func (self U32) Tag() uint8 {
+func (self U32) Tag() Tag {
 	return TAG_U32
 }
 
@@ -116,7 +116,7 @@ func DecodeU32(buf *bytes.Buffer) (U32, error) {
 }
 
 // Uint 64
-func (self U64) Tag() uint8 {
+func (self U64) Tag() Tag {
 	return TAG_U64
 }
 
@@ -135,4 +135,92 @@ func DecodeU64(buf *bytes.Buffer) (U64, error) {
 	}
 
 	return U64(v), nil
+}
+
+// Uint 8
+func (self U8) Tag() Tag {
+	return TAG_U8
+}
+
+func (self U8) String() string {
+	return fmt.Sprintf("U8(%v)", uint8(self))
+}
+
+func EncodeU8(value U8, buf *bytes.Buffer) error {
+	return buf.WriteByte(byte(value))
+}
+
+func DecodeU8(buf *bytes.Buffer) (U8, error) {
+	v, err := buf.ReadByte()
+	if err != nil {
+		return 0, err
+	}
+
+	return U8(v), nil
+}
+
+// Uint 16
+func (self U16) Tag() Tag {
+	return TAG_U16
+}
+
+func (self U16) String() string {
+	return fmt.Sprintf("U16(%v)", uint16(self))
+}
+
+func EncodeU16(value U16, buf *bytes.Buffer) error {
+	return writeUint16(buf, uint16(value))
+}
+
+func DecodeU16(buf *bytes.Buffer) (U16, error) {
+	v, err := readUint16(buf)
+	if err != nil {
+		return 0, err
+	}
+
+	return U16(v), nil
+}
+
+// Int 8
+func (self I8) Tag() Tag {
+	return TAG_I8
+}
+
+func (self I8) String() string {
+	return fmt.Sprintf("I8(%v)", int8(self))
+}
+
+func EncodeI8(value I8, buf *bytes.Buffer) error {
+	return buf.WriteByte(byte(value))
+}
+
+func DecodeI8(buf *bytes.Buffer) (I8, error) {
+	v, err := buf.ReadByte()
+	if err != nil {
+		return 0, err
+	}
+
+	return I8(int8(v)), nil
+}
+
+// Int 16
+func (self I16) Tag() Tag {
+	return TAG_I16
+}
+
+func (self I16) String() string {
+	return fmt.Sprintf("I16(%v)", int16(self))
+}
+
+func EncodeI16(value I16, buf *bytes.Buffer) error {
+	return writeInt16(buf, int16(value))
+}
+
+func DecodeI16(buf *bytes.Buffer) (I16, error) {
+	v, err := readInt16(buf)
+	if err != nil {
+		return 0, err
+	}
+
+	return I16(v), nil
 }

@@ -6,7 +6,7 @@ import (
 )
 
 // Timestamp
-func (self Timestamp) Tag() uint8 {
+func (self Timestamp) Tag() Tag {
 	return TAG_TIMESTAMP
 }
 

@@ -6,7 +6,7 @@ import (
 )
 
 // String
-func (self String) Tag() uint8 {
+func (self String) Tag() Tag {
 	return TAG_STRING
 }
 

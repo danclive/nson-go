@@ -2,7 +2,7 @@ package nson
 
 import "bytes"
 
-func (self Null) Tag() uint8 {
+func (self Null) Tag() Tag {
 	return TAG_NULL
 }
 

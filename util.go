@@ -56,6 +56,14 @@ func writeUint64(buf *bytes.Buffer, u uint64) error {
 	return binary.Write(buf, binary.LittleEndian, u)
 }
 
+func writeInt16(buf *bytes.Buffer, i int16) error {
+	return binary.Write(buf, binary.LittleEndian, i)
+}
+
+func writeUint16(buf *bytes.Buffer, u uint16) error {
+	return binary.Write(buf, binary.LittleEndian, u)
+}
+
 // func readCstring(rd *bytes.Buffer) (string, error) {
 // 	s, err := rd.ReadString(0x00)
 // 	if err != nil {
@@ -129,6 +137,22 @@ func readUint32(rd *bytes.Buffer) (uint32, error) {
 
 func readUint64(rd *bytes.Buffer) (uint64, error) {
 	var u uint64
+	if err := binary.Read(rd, binary.LittleEndian, &u); err != nil {
+		return 0, err
+	}
+	return u, nil
+}
+
+func readInt16(rd *bytes.Buffer) (int16, error) {
+	var i int16
+	if err := binary.Read(rd, binary.LittleEndian, &i); err != nil {
+		return 0, err
+	}
+	return i, nil
+}
+
+func readUint16(rd *bytes.Buffer) (uint16, error) {
+	var u uint16
 	if err := binary.Read(rd, binary.LittleEndian, &u); err != nil {
 		return 0, err
 	}

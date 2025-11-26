@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (self Id) Tag() uint8 {
+func (self Id) Tag() Tag {
 	return TAG_ID
 }
 

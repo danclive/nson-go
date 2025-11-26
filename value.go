@@ -6,7 +6,7 @@ import (
 )
 
 func EncodeValue(buf *bytes.Buffer, value Value) error {
-	if err := buf.WriteByte(value.Tag()); err != nil {
+	if err := buf.WriteByte(byte(value.Tag())); err != nil {
 		return err
 	}
 
@@ -23,6 +23,14 @@ func EncodeValue(buf *bytes.Buffer, value Value) error {
 		return EncodeU32(v, buf)
 	case U64:
 		return EncodeU64(v, buf)
+	case U8:
+		return EncodeU8(v, buf)
+	case U16:
+		return EncodeU16(v, buf)
+	case I8:
+		return EncodeI8(v, buf)
+	case I16:
+		return EncodeI16(v, buf)
 	case String:
 		return EncodeString(v, buf)
 	case Array:
@@ -50,10 +58,10 @@ func DecodeValue(buf *bytes.Buffer) (Value, error) {
 		return nil, err
 	}
 
-	return decodeValueWithTag(buf, tag)
+	return decodeValueWithTag(buf, Tag(tag))
 }
 
-func decodeValueWithTag(buf *bytes.Buffer, tag uint8) (Value, error) {
+func decodeValueWithTag(buf *bytes.Buffer, tag Tag) (Value, error) {
 	switch tag {
 	case TAG_F32:
 		value, err := DecodeF32(buf)
@@ -92,6 +100,34 @@ func decodeValueWithTag(buf *bytes.Buffer, tag uint8) (Value, error) {
 		return value, nil
 	case TAG_U64:
 		value, err := DecodeU64(buf)
+		if err != nil {
+			return nil, err
+		}
+
+		return value, nil
+	case TAG_U8:
+		value, err := DecodeU8(buf)
+		if err != nil {
+			return nil, err
+		}
+
+		return value, nil
+	case TAG_U16:
+		value, err := DecodeU16(buf)
+		if err != nil {
+			return nil, err
+		}
+
+		return value, nil
+	case TAG_I8:
+		value, err := DecodeI8(buf)
+		if err != nil {
+			return nil, err
+		}
+
+		return value, nil
+	case TAG_I16:
+		value, err := DecodeI16(buf)
 		if err != nil {
 			return nil, err
 		}

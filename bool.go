@@ -4,7 +4,7 @@ import (
 	"bytes"
 )
 
-func (self Bool) Tag() uint8 {
+func (self Bool) Tag() Tag {
 	return TAG_BOOL
 }
 

@@ -8,7 +8,7 @@ import (
 	"io"
 )
 
-func (self Binary) Tag() uint8 {
+func (self Binary) Tag() Tag {
 	return TAG_BINARY
 }
 

@@ -64,131 +64,41 @@ func DecodeValue(buf *bytes.Buffer) (Value, error) {
 func decodeValueWithTag(buf *bytes.Buffer, tag DataType) (Value, error) {
 	switch tag {
 	case DataTypeF32:
-		value, err := DecodeF32(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeF32(buf)
 	case DataTypeF64:
-		value, err := DecodeF64(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeF64(buf)
 	case DataTypeI32:
-		value, err := DecodeI32(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeI32(buf)
 	case DataTypeI64:
-		value, err := DecodeI64(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeI64(buf)
 	case DataTypeU32:
-		value, err := DecodeU32(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeU32(buf)
 	case DataTypeU64:
-		value, err := DecodeU64(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeU64(buf)
 	case DataTypeU8:
-		value, err := DecodeU8(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeU8(buf)
 	case DataTypeU16:
-		value, err := DecodeU16(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeU16(buf)
 	case DataTypeI8:
-		value, err := DecodeI8(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeI8(buf)
 	case DataTypeI16:
-		value, err := DecodeI16(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeI16(buf)
 	case DataTypeSTRING:
-		value, err := DecodeString(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeString(buf)
 	case DataTypeARRAY:
-		value, err := DecodeArray(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeArray(buf)
 	case DataTypeBOOL:
-		value, err := DecodeBool(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeBool(buf)
 	case DataTypeNULL:
-		value, err := DecodeNull(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeNull(buf)
 	case DataTypeBINARY:
-		value, err := DecodeBinary(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeBinary(buf)
 	case DataTypeTIMESTAMP:
-		value, err := DecodeTimestamp(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeTimestamp(buf)
 	case DataTypeID:
-		value, err := DecodeId(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeId(buf)
 	case DataTypeMAP:
-		value, err := DecodeMap(buf)
-		if err != nil {
-			return nil, err
-		}
-
-		return value, nil
+		return DecodeMap(buf)
 	default:
 		return nil, fmt.Errorf("Unsupported type '%X'", tag)
 	}

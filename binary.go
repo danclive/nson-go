@@ -30,7 +30,7 @@ func BinaryFromHex(s string) (Binary, error) {
 
 func EncodeBinary(binary Binary, buf *bytes.Buffer) error {
 	if err := writeUint32(buf, uint32(len(binary)+4)); err != nil {
-		return nil
+		return err
 	}
 
 	if _, err := buf.Write(binary); err != nil {

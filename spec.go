@@ -23,24 +23,43 @@ const (
 	DataTypeID        DataType = 0x42
 )
 
-// Deprecated: Use DataType* constants instead
-const (
-	TAG_BOOL      = DataTypeBOOL
-	TAG_NULL      = DataTypeNULL
-	TAG_F32       = DataTypeF32
-	TAG_F64       = DataTypeF64
-	TAG_I32       = DataTypeI32
-	TAG_I64       = DataTypeI64
-	TAG_U32       = DataTypeU32
-	TAG_U64       = DataTypeU64
-	TAG_I8        = DataTypeI8
-	TAG_U8        = DataTypeU8
-	TAG_I16       = DataTypeI16
-	TAG_U16       = DataTypeU16
-	TAG_STRING    = DataTypeSTRING
-	TAG_BINARY    = DataTypeBINARY
-	TAG_ARRAY     = DataTypeARRAY
-	TAG_MAP       = DataTypeMAP
-	TAG_TIMESTAMP = DataTypeTIMESTAMP
-	TAG_ID        = DataTypeID
-)
+func (dt DataType) IsPrimitive() bool {
+	return dt >= DataTypeBOOL && dt <= DataTypeU16
+}
+
+func (dt DataType) IsComplex() bool {
+	return dt == DataTypeARRAY || dt == DataTypeMAP
+}
+
+func (dt DataType) IsFixedSize() bool {
+	return dt >= DataTypeBOOL && dt <= DataTypeU16
+}
+
+func (dt DataType) IsVariableSize() bool {
+	return dt == DataTypeSTRING || dt == DataTypeBINARY
+}
+
+func (dt DataType) IsSpecial() bool {
+	return dt == DataTypeTIMESTAMP || dt == DataTypeID
+}
+
+func (dt DataType) Size() int {
+	switch dt {
+	case DataTypeBOOL:
+		return 1
+	case DataTypeI8, DataTypeU8:
+		return 1
+	case DataTypeI16, DataTypeU16:
+		return 2
+	case DataTypeI32, DataTypeU32, DataTypeF32:
+		return 4
+	case DataTypeI64, DataTypeU64, DataTypeF64:
+		return 8
+	case DataTypeTIMESTAMP:
+		return 8
+	case DataTypeID:
+		return 16
+	default:
+		return -1 // Variable size or unknown
+	}
+}

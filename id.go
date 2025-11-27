@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-func (self Id) Tag() Tag {
-	return TAG_ID
+func (self Id) DataType() DataType {
+	return DataTypeID
 }
 
 func (self Id) String() string {

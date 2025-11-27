@@ -6,8 +6,8 @@ import (
 )
 
 // Timestamp
-func (self Timestamp) Tag() Tag {
-	return TAG_TIMESTAMP
+func (self Timestamp) DataType() DataType {
+	return DataTypeTIMESTAMP
 }
 
 func (self Timestamp) String() string {

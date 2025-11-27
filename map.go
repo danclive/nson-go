@@ -9,8 +9,8 @@ import (
 )
 
 // Message
-func (self Map) Tag() Tag {
-	return TAG_MAP
+func (self Map) DataType() DataType {
+	return DataTypeMAP
 }
 
 func (self Map) String() string {
@@ -76,7 +76,7 @@ func (self *Map) GetF32(key string) (float32, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_F32 {
+	if value.DataType() != DataTypeF32 {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -89,7 +89,7 @@ func (self *Map) GetF64(key string) (float64, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_F64 {
+	if value.DataType() != DataTypeF64 {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -102,7 +102,7 @@ func (self *Map) GetI32(key string) (int32, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_I32 {
+	if value.DataType() != DataTypeI32 {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -115,7 +115,7 @@ func (self *Map) GetU32(key string) (uint32, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_U32 {
+	if value.DataType() != DataTypeU32 {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -128,7 +128,7 @@ func (self *Map) GetI64(key string) (int64, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_I64 {
+	if value.DataType() != DataTypeI64 {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -141,7 +141,7 @@ func (self *Map) GetU64(key string) (uint64, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_U64 {
+	if value.DataType() != DataTypeU64 {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -154,7 +154,7 @@ func (self *Map) GetString(key string) (string, error) {
 		return "", fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_STRING {
+	if value.DataType() != DataTypeSTRING {
 		return "", fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -167,7 +167,7 @@ func (self *Map) GetArray(key string) (Array, error) {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_ARRAY {
+	if value.DataType() != DataTypeARRAY {
 		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -180,7 +180,7 @@ func (self *Map) GetMap(key string) (Map, error) {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_MAP {
+	if value.DataType() != DataTypeMAP {
 		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -193,7 +193,7 @@ func (self *Map) GetBool(key string) (bool, error) {
 		return false, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_BOOL {
+	if value.DataType() != DataTypeBOOL {
 		return false, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -206,7 +206,7 @@ func (self *Map) IsNull(key string) bool {
 		return false
 	}
 
-	if value.Tag() != TAG_NULL {
+	if value.DataType() != DataTypeNULL {
 		return false
 	}
 
@@ -219,7 +219,7 @@ func (self *Map) GetBinary(key string) ([]byte, error) {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_BINARY {
+	if value.DataType() != DataTypeBINARY {
 		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -232,7 +232,7 @@ func (self *Map) GetTimestamp(key string) (int64, error) {
 		return 0, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_TIMESTAMP {
+	if value.DataType() != DataTypeTIMESTAMP {
 		return 0, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
@@ -245,7 +245,7 @@ func (self *Map) GetMapId(key string) (Id, error) {
 		return nil, fmt.Errorf("Not Present, key: %v", key)
 	}
 
-	if value.Tag() != TAG_ID {
+	if value.DataType() != DataTypeID {
 		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 

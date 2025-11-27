@@ -2,8 +2,8 @@ package nson
 
 import "bytes"
 
-func (self Null) Tag() Tag {
-	return TAG_NULL
+func (self Null) DataType() DataType {
+	return DataTypeNULL
 }
 
 func (self Null) String() string {

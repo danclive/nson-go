@@ -6,7 +6,7 @@ import (
 )
 
 func EncodeValue(buf *bytes.Buffer, value Value) error {
-	if err := buf.WriteByte(byte(value.Tag())); err != nil {
+	if err := buf.WriteByte(byte(value.DataType())); err != nil {
 		return err
 	}
 
@@ -48,7 +48,7 @@ func EncodeValue(buf *bytes.Buffer, value Value) error {
 	case Map:
 		return EncodeMap(v, buf)
 	default:
-		return fmt.Errorf("Unsupported type '%X'", value.Tag())
+		return fmt.Errorf("Unsupported type '%X'", value.DataType())
 	}
 }
 
@@ -58,131 +58,131 @@ func DecodeValue(buf *bytes.Buffer) (Value, error) {
 		return nil, err
 	}
 
-	return decodeValueWithTag(buf, Tag(tag))
+	return decodeValueWithTag(buf, DataType(tag))
 }
 
-func decodeValueWithTag(buf *bytes.Buffer, tag Tag) (Value, error) {
+func decodeValueWithTag(buf *bytes.Buffer, tag DataType) (Value, error) {
 	switch tag {
-	case TAG_F32:
+	case DataTypeF32:
 		value, err := DecodeF32(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_F64:
+	case DataTypeF64:
 		value, err := DecodeF64(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_I32:
+	case DataTypeI32:
 		value, err := DecodeI32(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_I64:
+	case DataTypeI64:
 		value, err := DecodeI64(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_U32:
+	case DataTypeU32:
 		value, err := DecodeU32(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_U64:
+	case DataTypeU64:
 		value, err := DecodeU64(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_U8:
+	case DataTypeU8:
 		value, err := DecodeU8(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_U16:
+	case DataTypeU16:
 		value, err := DecodeU16(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_I8:
+	case DataTypeI8:
 		value, err := DecodeI8(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_I16:
+	case DataTypeI16:
 		value, err := DecodeI16(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_STRING:
+	case DataTypeSTRING:
 		value, err := DecodeString(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_ARRAY:
+	case DataTypeARRAY:
 		value, err := DecodeArray(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_BOOL:
+	case DataTypeBOOL:
 		value, err := DecodeBool(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_NULL:
+	case DataTypeNULL:
 		value, err := DecodeNull(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_BINARY:
+	case DataTypeBINARY:
 		value, err := DecodeBinary(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_TIMESTAMP:
+	case DataTypeTIMESTAMP:
 		value, err := DecodeTimestamp(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_ID:
+	case DataTypeID:
 		value, err := DecodeId(buf)
 		if err != nil {
 			return nil, err
 		}
 
 		return value, nil
-	case TAG_MAP:
+	case DataTypeMAP:
 		value, err := DecodeMap(buf)
 		if err != nil {
 			return nil, err

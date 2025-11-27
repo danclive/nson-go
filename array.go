@@ -7,8 +7,8 @@ import (
 )
 
 // Array
-func (self Array) Tag() Tag {
-	return TAG_ARRAY
+func (self Array) DataType() DataType {
+	return DataTypeARRAY
 }
 
 func (self Array) String() string {
@@ -83,7 +83,7 @@ func DecodeArray(buf *bytes.Buffer) (Array, error) {
 			break
 		}
 
-		value, err := decodeValueWithTag(buf, Tag(tag))
+		value, err := decodeValueWithTag(buf, DataType(tag))
 		if err != nil {
 			return nil, err
 		}

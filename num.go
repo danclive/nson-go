@@ -6,8 +6,8 @@ import (
 )
 
 // Float 32
-func (self F32) Tag() Tag {
-	return TAG_F32
+func (self F32) DataType() DataType {
+	return DataTypeF32
 }
 
 func (self F32) String() string {
@@ -28,8 +28,8 @@ func DecodeF32(buf *bytes.Buffer) (F32, error) {
 }
 
 // Float 64
-func (self F64) Tag() Tag {
-	return TAG_F64
+func (self F64) DataType() DataType {
+	return DataTypeF64
 }
 
 func (self F64) String() string {
@@ -50,8 +50,8 @@ func DecodeF64(buf *bytes.Buffer) (F64, error) {
 }
 
 // Int 32
-func (self I32) Tag() Tag {
-	return TAG_I32
+func (self I32) DataType() DataType {
+	return DataTypeI32
 }
 
 func (self I32) String() string {
@@ -72,8 +72,8 @@ func DecodeI32(buf *bytes.Buffer) (I32, error) {
 }
 
 // Int 64
-func (self I64) Tag() Tag {
-	return TAG_I64
+func (self I64) DataType() DataType {
+	return DataTypeI64
 }
 
 func (self I64) String() string {
@@ -94,8 +94,8 @@ func DecodeI64(buf *bytes.Buffer) (I64, error) {
 }
 
 // Uint 32
-func (self U32) Tag() Tag {
-	return TAG_U32
+func (self U32) DataType() DataType {
+	return DataTypeU32
 }
 
 func (self U32) String() string {
@@ -116,8 +116,8 @@ func DecodeU32(buf *bytes.Buffer) (U32, error) {
 }
 
 // Uint 64
-func (self U64) Tag() Tag {
-	return TAG_U64
+func (self U64) DataType() DataType {
+	return DataTypeU64
 }
 
 func (self U64) String() string {
@@ -138,8 +138,8 @@ func DecodeU64(buf *bytes.Buffer) (U64, error) {
 }
 
 // Uint 8
-func (self U8) Tag() Tag {
-	return TAG_U8
+func (self U8) DataType() DataType {
+	return DataTypeU8
 }
 
 func (self U8) String() string {
@@ -160,8 +160,8 @@ func DecodeU8(buf *bytes.Buffer) (U8, error) {
 }
 
 // Uint 16
-func (self U16) Tag() Tag {
-	return TAG_U16
+func (self U16) DataType() DataType {
+	return DataTypeU16
 }
 
 func (self U16) String() string {
@@ -182,8 +182,8 @@ func DecodeU16(buf *bytes.Buffer) (U16, error) {
 }
 
 // Int 8
-func (self I8) Tag() Tag {
-	return TAG_I8
+func (self I8) DataType() DataType {
+	return DataTypeI8
 }
 
 func (self I8) String() string {
@@ -204,8 +204,8 @@ func DecodeI8(buf *bytes.Buffer) (I8, error) {
 }
 
 // Int 16
-func (self I16) Tag() Tag {
-	return TAG_I16
+func (self I16) DataType() DataType {
+	return DataTypeI16
 }
 
 func (self I16) String() string {

@@ -8,8 +8,8 @@ import (
 	"io"
 )
 
-func (self Binary) Tag() Tag {
-	return TAG_BINARY
+func (self Binary) DataType() DataType {
+	return DataTypeBINARY
 }
 
 func (self Binary) String() string {

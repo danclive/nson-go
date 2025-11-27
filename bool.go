@@ -4,8 +4,8 @@ import (
 	"bytes"
 )
 
-func (self Bool) Tag() Tag {
-	return TAG_BOOL
+func (self Bool) DataType() DataType {
+	return DataTypeBOOL
 }
 
 func (self Bool) String() string {

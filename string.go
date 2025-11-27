@@ -6,8 +6,8 @@ import (
 )
 
 // String
-func (self String) Tag() Tag {
-	return TAG_STRING
+func (self String) DataType() DataType {
+	return DataTypeSTRING
 }
 
 func (self String) String() string {

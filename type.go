@@ -1,7 +1,7 @@
 package nson
 
 type Value interface {
-	Tag() Tag
+	DataType() DataType
 	String() string
 }
 

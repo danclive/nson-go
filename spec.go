@@ -63,3 +63,46 @@ func (dt DataType) Size() int {
 		return -1 // Variable size or unknown
 	}
 }
+
+func (dt DataType) ZeroValue() Value {
+	switch dt {
+	case DataTypeBOOL:
+		return Bool(false)
+	case DataTypeNULL:
+		return Null{}
+	case DataTypeF32:
+		return F32(0)
+	case DataTypeF64:
+		return F64(0)
+	case DataTypeI32:
+		return I32(0)
+	case DataTypeI64:
+		return I64(0)
+	case DataTypeU32:
+		return U32(0)
+	case DataTypeU64:
+		return U64(0)
+	case DataTypeI8:
+		return I8(0)
+	case DataTypeU8:
+		return U8(0)
+	case DataTypeI16:
+		return I16(0)
+	case DataTypeU16:
+		return U16(0)
+	case DataTypeSTRING:
+		return String("")
+	case DataTypeBINARY:
+		return Binary([]byte{})
+	case DataTypeARRAY:
+		return Array([]Value{})
+	case DataTypeMAP:
+		return Map(make(map[string]Value))
+	case DataTypeTIMESTAMP:
+		return Timestamp(0)
+	case DataTypeID:
+		return Id(make([]byte, 12))
+	default:
+		return nil
+	}
+}

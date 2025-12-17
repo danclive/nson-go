@@ -79,7 +79,7 @@ func readString(rd *bytes.Buffer) (string, error) {
 		return "", err
 	}
 
-	if l < MIN_NSON_SIZE {
+	if l < MIN_NSON_SIZE-1 {
 		return "", errors.New("Invalid string length")
 	}
 

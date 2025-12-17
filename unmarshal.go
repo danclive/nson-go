@@ -268,8 +268,8 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 
 	case reflect.Interface:
 		// 检查是否是 nson.Value 接口类型
-		if rv.Type().Implements(reflect.TypeOf((*Value)(nil)).Elem()) ||
-			reflect.TypeOf(val).Implements(rv.Type()) {
+		valueType := reflect.TypeOf((*Value)(nil)).Elem()
+		if rv.Type() == valueType || rv.Type().Implements(valueType) {
 			// 直接设置 nson.Value 类型
 			rv.Set(reflect.ValueOf(val))
 			return nil

@@ -267,6 +267,13 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 		return nil
 
 	case reflect.Interface:
+		// 检查是否是 nson.Value 接口类型
+		if rv.Type().Implements(reflect.TypeOf((*Value)(nil)).Elem()) ||
+			reflect.TypeOf(val).Implements(rv.Type()) {
+			// 直接设置 nson.Value 类型
+			rv.Set(reflect.ValueOf(val))
+			return nil
+		}
 		// 对于 interface{}，直接设置对应的 Go 类型
 		rv.Set(reflect.ValueOf(nsonToInterface(val)))
 		return nil

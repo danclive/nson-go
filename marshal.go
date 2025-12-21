@@ -135,7 +135,7 @@ func marshalValue(rv reflect.Value) (Value, error) {
 			return Null{}, nil
 		}
 		// 检查是否实现了 nson.Value 接口
-		if rv.Type().Implements(reflect.TypeOf((*Value)(nil)).Elem()) {
+		if rv.Type().Implements(reflect.TypeFor[Value]()) {
 			// 直接返回 nson.Value
 			if val, ok := rv.Interface().(Value); ok {
 				return val, nil

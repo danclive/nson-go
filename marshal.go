@@ -106,7 +106,7 @@ func marshalValue(rv reflect.Value) (Value, error) {
 
 	case reflect.Slice:
 		// 检查是否是 nson.Id 类型（[]byte 的别名）
-		if rv.Type() == reflect.TypeOf(Id(nil)) {
+		if rv.Type() == reflect.TypeFor[Id]() {
 			return Id(rv.Bytes()), nil
 		}
 		if rv.Type().Elem().Kind() == reflect.Uint8 {
@@ -120,7 +120,7 @@ func marshalValue(rv reflect.Value) (Value, error) {
 
 	case reflect.Struct:
 		// 检查是否是 time.Time 类型
-		if rv.Type() == reflect.TypeOf(time.Time{}) {
+		if rv.Type() == reflect.TypeFor[time.Time]() {
 			t := rv.Interface().(time.Time)
 			// 转换为毫秒时间戳
 			return Timestamp(t.UnixMilli()), nil

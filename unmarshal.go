@@ -171,7 +171,7 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 
 	case reflect.Slice:
 		// 检查是否是 nson.Id 类型
-		if rv.Type() == reflect.TypeOf(Id(nil)) {
+		if rv.Type() == reflect.TypeFor[Id]() {
 			if v, ok := val.(Id); ok {
 				rv.SetBytes([]byte(v))
 				return nil
@@ -220,7 +220,7 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 
 	case reflect.Struct:
 		// 检查是否是 time.Time 类型
-		if rv.Type() == reflect.TypeOf(time.Time{}) {
+		if rv.Type() == reflect.TypeFor[time.Time]() {
 			if v, ok := val.(Timestamp); ok {
 				// 从毫秒时间戳转换为 time.Time
 				t := time.UnixMilli(int64(v))
@@ -237,7 +237,7 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 
 	case reflect.Map:
 		// 检查是否是 nson.Map 类型
-		if rv.Type() == reflect.TypeOf(Map{}) {
+		if rv.Type() == reflect.TypeFor[Map]() {
 			m, ok := val.(Map)
 			if !ok {
 				return fmt.Errorf("expected Map, got %T", val)
@@ -268,7 +268,7 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 
 	case reflect.Interface:
 		// 检查是否是 nson.Value 接口类型
-		valueType := reflect.TypeOf((*Value)(nil)).Elem()
+		valueType := reflect.TypeFor[Value]()
 		if rv.Type() == valueType || rv.Type().Implements(valueType) {
 			// 直接设置 nson.Value 类型
 			rv.Set(reflect.ValueOf(val))

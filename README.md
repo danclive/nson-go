@@ -139,6 +139,51 @@ type Article struct {
 }
 ```
 
+### 类型别名支持
+
+NSON 完全支持类型别名（type alias），无需额外转换：
+
+```go
+// 定义类型别名（常见于业务代码中）
+type QoS uint8
+type Priority uint8
+type Status int32
+
+const (
+    QoS0 QoS = 0
+    QoS1 QoS = 1
+    QoS2 QoS = 2
+)
+
+type Message struct {
+    Topic    string   `nson:"topic"`
+    QoS      QoS      `nson:"qos"`        // 直接使用类型别名
+    Priority Priority `nson:"priority"`    // 直接使用类型别名
+    Status   Status   `nson:"status"`      // 直接使用类型别名
+}
+
+// 无需中间结构体转换，直接序列化
+msg := Message{
+    Topic:    "test/topic",
+    QoS:      QoS1,      // 自动转换为 U8
+    Priority: 1,         // 自动转换为 U8
+    Status:   200,       // 自动转换为 I32
+}
+
+m, _ := nson.Marshal(&msg)
+// QoS, Priority, Status 根据底层类型自动映射到对应的 NSON 类型
+
+var decoded Message
+nson.Unmarshal(m, &decoded)
+// decoded.QoS == QoS1 (保持原始类型)
+```
+
+**优势：**
+- ✅ 无需创建中间结构体
+- ✅ 避免字段拷贝
+- ✅ 保持类型安全
+- ✅ 零运行时开销
+
 ## 类型映射
 
 | Go 类型 | NSON 类型 | 大小 | 说明 |

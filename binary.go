@@ -46,7 +46,7 @@ func DecodeBinary(buf *bytes.Buffer) (Binary, error) {
 		return nil, err
 	}
 
-	if l < MIN_NSON_SIZE {
+	if l < MIN_NSON_SIZE-1 {
 		return nil, errors.New("Invalid binary length")
 	}
 

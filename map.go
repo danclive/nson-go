@@ -242,11 +242,11 @@ func (self *Map) GetTimestamp(key string) (int64, error) {
 func (self *Map) GetMapId(key string) (Id, error) {
 	value, has := self.Get(key)
 	if !has {
-		return nil, fmt.Errorf("Not Present, key: %v", key)
+		return Id{}, fmt.Errorf("Not Present, key: %v", key)
 	}
 
 	if value.DataType() != DataTypeID {
-		return nil, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
+		return Id{}, fmt.Errorf("Unexpected Type, key: %v, value: %v", key, value)
 	}
 
 	return value.(Id), nil

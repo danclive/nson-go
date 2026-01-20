@@ -39,4 +39,4 @@ type Binary []byte
 
 type Timestamp uint64
 
-type Id []byte
+type Id [12]byte

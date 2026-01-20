@@ -170,14 +170,6 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 		return fmt.Errorf("expected String, got %T", val)
 
 	case reflect.Slice:
-		// 检查是否是 nson.Id 类型
-		if rv.Type() == reflect.TypeFor[Id]() {
-			if v, ok := val.(Id); ok {
-				rv.SetBytes([]byte(v))
-				return nil
-			}
-			return fmt.Errorf("expected Id, got %T", val)
-		}
 		if rv.Type().Elem().Kind() == reflect.Uint8 {
 			// []byte
 			if v, ok := val.(Binary); ok {
@@ -202,6 +194,15 @@ func unmarshalValue(val Value, rv reflect.Value) error {
 		return nil
 
 	case reflect.Array:
+		// 检查是否是 nson.Id 类型（[12]byte）
+		if rv.Type() == reflect.TypeFor[Id]() {
+			if v, ok := val.(Id); ok {
+				rv.Set(reflect.ValueOf(v))
+				return nil
+			}
+			return fmt.Errorf("expected nson.Id, got %T", val)
+		}
+
 		arr, ok := val.(Array)
 		if !ok {
 			return fmt.Errorf("expected Array, got %T", val)
@@ -315,7 +316,7 @@ func nsonToInterface(val Value) any {
 	case Timestamp:
 		return uint64(v)
 	case Id:
-		return []byte(v)
+		return [12]byte(v)
 	case Array:
 		arr := make([]any, len(v))
 		for i, item := range v {

@@ -172,7 +172,7 @@ func demo4_ComplexExample() {
 	nson.Unmarshal(m, &result)
 
 	fmt.Println("反序列化验证:")
-	fmt.Printf("  ID 匹配:   %v\n", string(user.ID) == string(result.ID))
+	fmt.Printf("  ID 匹配:   %v\n", user.ID == result.ID)
 	fmt.Printf("  Name:      %s\n", result.Name)
 	fmt.Printf("  Age:       %d\n", result.Age)
 	fmt.Printf("  时间匹配:  %v\n", user.CreatedAt.UnixMilli() == result.CreatedAt.UnixMilli())

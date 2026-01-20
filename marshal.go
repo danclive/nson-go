@@ -105,10 +105,6 @@ func marshalValue(rv reflect.Value) (Value, error) {
 		return String(rv.String()), nil
 
 	case reflect.Slice:
-		// 检查是否是 nson.Id 类型（[]byte 的别名）
-		if rv.Type() == reflect.TypeFor[Id]() {
-			return Id(rv.Bytes()), nil
-		}
 		if rv.Type().Elem().Kind() == reflect.Uint8 {
 			// []byte
 			return Binary(rv.Bytes()), nil
@@ -116,6 +112,12 @@ func marshalValue(rv reflect.Value) (Value, error) {
 		return marshalSlice(rv)
 
 	case reflect.Array:
+		// 检查是否是 nson.Id 类型（[12]byte）
+		if rv.Type() == reflect.TypeFor[Id]() {
+			var id Id
+			reflect.Copy(reflect.ValueOf(&id).Elem(), rv)
+			return id, nil
+		}
 		return marshalArray(rv)
 
 	case reflect.Struct:

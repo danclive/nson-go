@@ -16,11 +16,10 @@ func (self Id) DataType() DataType {
 }
 
 func (self Id) String() string {
-	return fmt.Sprintf("Id(%x)", []byte(self))
+	return fmt.Sprintf("Id(%x)", self[:])
 }
 
 var lastCount = uint32(time.Now().Nanosecond())
-var identify = uint32(time.Now().Nanosecond())
 
 // Create unique incrementing Id.
 //
@@ -49,24 +48,24 @@ func NewId() Id {
 
 func IdFromHex(s string) (Id, error) {
 	if len(s) != 24 {
-		return nil, fmt.Errorf("Id hex must be 24 chars: %v", s)
+		return Id{}, fmt.Errorf("Id hex must be 24 chars: %v", s)
 	}
 
 	b, err := hex.DecodeString(s)
 	if err != nil {
-		return nil, err
+		return Id{}, err
 	}
 
 	return Id(b), nil
 }
 
 func (self Id) Hex() string {
-	return hex.EncodeToString([]byte(self))
+	return hex.EncodeToString(self[:])
 }
 
 func (self Id) Timestamp() int64 {
-	a := uint64(binary.BigEndian.Uint32([]byte(self)[:4]))
-	b := uint64(binary.BigEndian.Uint16([]byte(self)[4:6]))
+	a := uint64(binary.BigEndian.Uint32(self[:4]))
+	b := uint64(binary.BigEndian.Uint16(self[4:6]))
 
 	return int64(a<<16 + b)
 }
@@ -74,6 +73,10 @@ func (self Id) Timestamp() int64 {
 func (self Id) Time() time.Time {
 	ts := self.Timestamp()
 	return time.Unix(ts/1000, ts%1000*1000000).UTC()
+}
+
+func (self Id) IsZero() bool {
+	return self == Id{}
 }
 
 // uint64 to 8 bytes
@@ -88,7 +91,7 @@ func EncodeId(value Id, buf *bytes.Buffer) error {
 		return fmt.Errorf("Id must be 12 bytes: %v", value)
 	}
 
-	if _, err := buf.Write(value); err != nil {
+	if _, err := buf.Write(value[:]); err != nil {
 		return err
 	}
 
@@ -99,7 +102,7 @@ func DecodeId(buf *bytes.Buffer) (Id, error) {
 	b := make([]byte, 12)
 	_, err := io.ReadFull(buf, b)
 	if err != nil {
-		return nil, err
+		return Id{}, err
 	}
 
 	return Id(b), nil

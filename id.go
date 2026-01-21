@@ -87,10 +87,6 @@ func Uint64To4Bytes(i uint64) []byte {
 }
 
 func EncodeId(value Id, buf *bytes.Buffer) error {
-	if len(value) != 12 {
-		return fmt.Errorf("Id must be 12 bytes: %v", value)
-	}
-
 	if _, err := buf.Write(value[:]); err != nil {
 		return err
 	}
